@@ -1,23 +1,44 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+		<router-view></router-view>
+		<tab-bar>
+		  <tab-bar-item path="/home">
+			  <img src="./assets/img/tabbar/首页(1).png" slot="item-img">
+			  <img src="./assets/img/tabbar/首页.png" slot="item-img-active">
+			  <div slot="item-text">首页</div>
+		  </tab-bar-item>
+		  <tab-bar-item path="/category">
+			  <img src="./assets/img/tabbar/分类(1).png" slot="item-img">
+			  <img src="./assets/img/tabbar/分类.png" slot="item-img-active">
+			  <div slot="item-text">分类</div>
+		  </tab-bar-item>
+		  <tab-bar-item path="/cart">
+			  <img src="./assets/img/tabbar/购物车(1).png" slot="item-img">
+			  <img src="./assets/img/tabbar/购物车.png" slot="item-img-active">
+			  <div slot="item-text">购物车</div>
+		  </tab-bar-item>
+		  <tab-bar-item path="/profile">
+			  <img src="./assets/img/tabbar/我的(1).png" slot="item-img">
+			  <img src="./assets/img/tabbar/我的.png" slot="item-img-active">
+			  <div slot="item-text">我的</div>
+		  </tab-bar-item>
+		</tab-bar>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+	import TabBar from './components/common/tabbar/tabbar.vue'
+	import TabBarItem from './components/common/tabbar/tabbaritem.vue'
+	
+	export default {
+		name: 'App',
+		components: {
+		  TabBar,
+		  TabBarItem
+		}
+	}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+	@import "assets/css/base.css"
 </style>
