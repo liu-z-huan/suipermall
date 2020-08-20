@@ -1,26 +1,17 @@
 <template>
-	<div id="home">
+	<div id="home" class="wrapper">
 		<nav-bar class='home-nav'><div slot="center">购物街</div></nav-bar>
-		<home-swiper :banners="banners"></home-swiper>
-		<home-recommend-view :recommends="recommends"></home-recommend-view>
-		<feature-view></feature-view>
-		<tab-control 
-			:titles="['流行','新款','精选']" 
-			class="tab-control"
-			@tabClick = "tabClick" />
-		<goods-list :goods="showGoods" class="goods-list"></goods-list>
-		
-		<ul>
-			<li>11</li>
-			<li>1</li>
-			<li>1</li>
-			<li>1</li>
-			<li>1</li>
-			<li>1</li>
-			<li>11</li>
-			<li>1</li>
-			<li>1</li>
-		</ul>
+		<scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+			<home-swiper :banners="banners"></home-swiper>
+			<home-recommend-view :recommends="recommends"></home-recommend-view>
+			<feature-view></feature-view>
+			<tab-control 
+				:titles="['流行','新款','精选']" 
+				class="tab-control"
+				@tabClick = "tabClick" />
+			<goods-list :goods="showGoods" class="goods-list"></goods-list>
+		</scroll>
+		<back-top @click.native="backClick" v-show="isShowBckTop"></back-top>
 	</div>
 </template>
 
@@ -32,6 +23,8 @@
 	import HomeRecommendView from './childcomps/HomeRecommendView.vue'
 	import FeatureView from './childcomps/FeatureView.vue'
 	import GoodsList from '../../components/content/goods/GoodsList.vue'
+	import Scroll from '../../components/common/scroll/Scroll.vue'
+	import BackTop from '../../components/content/backTop/BackTop.vue'
 	
 	import {getHomeMultidata,getHomeGoods} from '../../network/home.js'
 	
@@ -43,7 +36,9 @@
 			HomeRecommendView,
 			FeatureView,
 			TabControl,
-			GoodsList
+			GoodsList,
+			Scroll,
+			BackTop
 		},
 		data(){
 			return{
@@ -54,7 +49,8 @@
 					'new':{page:0,list:[]},
 					'sell':{page:0,list:[]}
 				},
-				currentType:'pop'
+				currentType:'pop',
+				isShowBckTop:false
 			}
 		},
 		created(){
@@ -85,6 +81,12 @@
 						break
 				}
 			},
+			backClick(){
+				this.$refs.scroll.scrollTo(0, 0,)
+			},
+			contentScroll(position){
+				this.isShowBckTop = -position.y >= 1000
+			},
 			//网络请求相关方法
 			getHomeMultidata(){
 				getHomeMultidata().then(res => {
@@ -105,9 +107,10 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	#home{
-		padding-top:44px;
+		
+		height:100vh;
 	}
 	.home-nav{
 		background-color: var(--color-tint);
@@ -123,5 +126,10 @@
 		position: sticky;
 		top:44px;
 		z-index:9;
+	}
+	.content{
+		height: calc(100% - 93px);
+		overflow: hidden;
+		margin-top:44px;
 	}
 </style>
