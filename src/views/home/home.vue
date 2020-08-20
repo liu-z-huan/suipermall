@@ -1,7 +1,12 @@
 <template>
 	<div id="home" class="wrapper">
 		<nav-bar class='home-nav'><div slot="center">购物街</div></nav-bar>
-		<scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+		<scroll class="content" 
+			ref="scroll" 
+			:probe-type="3" 
+			@scroll="contentScroll"
+			:pull-up-load="true"
+			@pullingUp="loadMore">
 			<home-swiper :banners="banners"></home-swiper>
 			<home-recommend-view :recommends="recommends"></home-recommend-view>
 			<feature-view></feature-view>
@@ -87,6 +92,11 @@
 			contentScroll(position){
 				this.isShowBckTop = -position.y >= 1000
 			},
+			loadMore(){
+				this.getHomeGoods(this.currentType)
+				
+				this.$refs.scroll.scroll.refresh()
+			},	
 			//网络请求相关方法
 			getHomeMultidata(){
 				getHomeMultidata().then(res => {
@@ -101,6 +111,8 @@
 					// console.log(res);
 					this.goods[type].list.push(...res.data.list);
 					this.goods[type].page +=1
+					
+					this.$refs.scroll.finishPullUp()
 				})
 			}
 		}
